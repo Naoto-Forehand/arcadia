@@ -1,0 +1,146 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f11136daadff0b44ac2278a314682ab, type: 3}
+  m_Name: GroupDisplayGraph
+  m_EditorClassIdentifier: 
+  serializedUdonProgramAsset: {fileID: 11400000, guid: 36e2574c270358e4eb563d9cfe826661,
+    type: 2}
+  udonAssembly: ".data_start\r\n\r\n    .export GroupID\r\n    .export GroupName\r\n   
+    .sync GroupID, none\r\n    .sync GroupName, none\r\n    \r\n    __instance_0:
+    %VRCUdonUdonBehaviour, this\r\n    __value_0: %SystemString, null\r\n    __shortcode_0:
+    %SystemString, null\r\n    GroupID: %SystemString, null\r\n    GroupName: %SystemString,
+    null\r\n\r\n.data_end\r\n\r\n.code_start\r\n\r\n    .export _start\r\n    \r\n   
+    _start:\r\n    \r\n        PUSH, GroupName\r\n        PUSH, __value_0\r\n       
+    COPY\r\n        PUSH, __instance_0\r\n        PUSH, __value_0\r\n        EXTERN,
+    \"VRCUdonCommonInterfacesIUdonEventReceiver.__set_InteractionText__SystemString__SystemVoid\"\r\n       
+    JUMP, 0xFFFFFFFC\r\n    \r\n    .export _interact\r\n    \r\n    _interact:\r\n   
+    \r\n        PUSH, GroupID\r\n        PUSH, __shortcode_0\r\n        COPY\r\n       
+    PUSH, __shortcode_0\r\n        EXTERN, \"VRCEconomyStore.__OpenGroupPage__SystemString__SystemVoid\"\r\n       
+    JUMP, 0xFFFFFFFC\r\n    \r\n\r\n.code_end\r\n"
+  assemblyError: 
+  graphData:
+    name: 
+    description: 
+    nodes:
+    - fullName: Variable_SystemString
+      uid: ebd6669d-306c-4893-93df-f592e4e74042
+      position: {x: 0, y: 0}
+      nodeUIDs:
+      - 
+      - 
+      - 
+      - 
+      - 
+      flowUIDs: []
+      nodeValues:
+      - unityObjectValue: {fileID: 0}
+        stringValue: 
+      - unityObjectValue: {fileID: 0}
+        stringValue: System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|GroupID
+      - unityObjectValue: {fileID: 0}
+        stringValue: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
+          PublicKeyToken=b77a5c561934e089|True
+      - unityObjectValue: {fileID: 0}
+        stringValue: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
+          PublicKeyToken=b77a5c561934e089|True
+      - unityObjectValue: {fileID: 0}
+        stringValue: System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|none
+    - fullName: Variable_SystemString
+      uid: d874b461-8d84-4586-9187-b40b6e6bf25a
+      position: {x: 0, y: 0}
+      nodeUIDs:
+      - 
+      - 
+      - 
+      - 
+      - 
+      flowUIDs: []
+      nodeValues:
+      - unityObjectValue: {fileID: 0}
+        stringValue: 
+      - unityObjectValue: {fileID: 0}
+        stringValue: System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|GroupName
+      - unityObjectValue: {fileID: 0}
+        stringValue: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
+          PublicKeyToken=b77a5c561934e089|True
+      - unityObjectValue: {fileID: 0}
+        stringValue: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
+          PublicKeyToken=b77a5c561934e089|True
+      - unityObjectValue: {fileID: 0}
+        stringValue: System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|none
+    - fullName: Event_Start
+      uid: dbced190-3b86-46c2-92bc-fdacaedd8d33
+      position: {x: 309, y: -37}
+      nodeUIDs: []
+      flowUIDs:
+      - 7941329f-92f5-4d3f-b956-2118e8cf63d0
+      nodeValues: []
+    - fullName: VRCUdonCommonInterfacesIUdonEventReceiver.__set_InteractionText__SystemString__SystemVoid
+      uid: 7941329f-92f5-4d3f-b956-2118e8cf63d0
+      position: {x: 492, y: 0}
+      nodeUIDs:
+      - 
+      - 67026bee-167a-4d0e-aa4c-8ce088ca0044|0
+      flowUIDs: []
+      nodeValues:
+      - unityObjectValue: {fileID: 0}
+        stringValue: 
+      - unityObjectValue: {fileID: 0}
+        stringValue: 
+    - fullName: Get_Variable
+      uid: 67026bee-167a-4d0e-aa4c-8ce088ca0044
+      position: {x: 302, y: 57}
+      nodeUIDs:
+      - 
+      flowUIDs: []
+      nodeValues:
+      - unityObjectValue: {fileID: 0}
+        stringValue: System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|d874b461-8d84-4586-9187-b40b6e6bf25a
+      - unityObjectValue: {fileID: 0}
+        stringValue: 
+    - fullName: Event_Interact
+      uid: bb064938-ed31-4580-9172-bbb4719a737d
+      position: {x: 802.3225, y: -30}
+      nodeUIDs: []
+      flowUIDs:
+      - 6d37cdd2-d892-481f-b464-580110317b02
+      nodeValues: []
+    - fullName: VRCEconomyStore.__OpenGroupPage__SystemString__SystemVoid
+      uid: 6d37cdd2-d892-481f-b464-580110317b02
+      position: {x: 980.3225, y: -32}
+      nodeUIDs:
+      - 70aa2b93-1cbd-4a17-89a4-89d0daaf51b9|0
+      flowUIDs: []
+      nodeValues:
+      - unityObjectValue: {fileID: 0}
+        stringValue: 
+    - fullName: Get_Variable
+      uid: 70aa2b93-1cbd-4a17-89a4-89d0daaf51b9
+      position: {x: 785.3225, y: 57}
+      nodeUIDs:
+      - 
+      flowUIDs: []
+      nodeValues:
+      - unityObjectValue: {fileID: 0}
+        stringValue: System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|ebd6669d-306c-4893-93df-f592e4e74042
+      - unityObjectValue: {fileID: 0}
+        stringValue: 
+    updateOrder: 0
+  graphElementData:
+  - type: 2
+    uid: 864bd79b-b799-4737-8465-6d619faeeed3
+    jsonData: '{"uid":"864bd79b-b799-4737-8465-6d619faeeed3","layout":{"serializedVersion":"2","x":284.0,"y":-95.0,"width":480.0,"height":251.0},"containedElements":["7941329f-92f5-4d3f-b956-2118e8cf63d0","dbced190-3b86-46c2-92bc-fdacaedd8d33","67026bee-167a-4d0e-aa4c-8ce088ca0044"],"title":"OnStart","layer":-1,"elementTypeColor":{"r":0.0,"g":0.0,"b":0.0,"a":1.0}}'
+  - type: 2
+    uid: f4333c65-f827-4b28-ad02-6eabffcbe482
+    jsonData: '{"uid":"f4333c65-f827-4b28-ad02-6eabffcbe482","layout":{"serializedVersion":"2","x":760.0,"y":-90.00000762939453,"width":419.0,"height":255.0},"containedElements":["bb064938-ed31-4580-9172-bbb4719a737d","6d37cdd2-d892-481f-b464-580110317b02","70aa2b93-1cbd-4a17-89a4-89d0daaf51b9"],"title":"OnInteract","layer":-1,"elementTypeColor":{"r":0.0,"g":0.0,"b":0.0,"a":1.0}}'
+  version: 1.0.0
+  showAssembly: 0
