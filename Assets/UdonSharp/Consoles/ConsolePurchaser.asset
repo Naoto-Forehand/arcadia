@@ -230,7 +230,7 @@ MonoBehaviour:
       Data: 13|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: VRC.Economy.SimpleProduct[], VRCEconomy
+      Data: VRC.Economy.UdonProduct[], VRCEconomy
     - Name: 
       Entry: 8
       Data: 

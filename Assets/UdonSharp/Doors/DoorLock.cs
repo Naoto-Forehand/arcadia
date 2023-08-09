@@ -14,10 +14,12 @@ public class DoorLock : UdonSharpBehaviour
     private Animator _doorAnimator;
     private const string DOOR_TRIGGER = "character_nearby";
     private IProduct _fetchedProduct;
+
+    [SerializeField]
+    private bool _overrideLock;
     
     [SerializeField]
-    private SimpleProduct _product;
-    // private EventReceiver _eventReceiver;
+    private UdonProduct _product;
     
     [UdonSynced, FieldChangeCallback(nameof(IsLocked))]
     private bool _isLocked;
@@ -26,7 +28,10 @@ public class DoorLock : UdonSharpBehaviour
     
     public bool IsLocked
     {
-        get { return _isLocked; }
+        get
+        {
+            return (_overrideLock) ? false : _isLocked;
+        }
         set { _isLocked = value; }
     }
 
@@ -43,7 +48,6 @@ public class DoorLock : UdonSharpBehaviour
     public IProduct Product
     {
         get { return _product; }
-        // set { _product = value as SimpleProduct; }
     }
     
     void Start()
@@ -54,11 +58,6 @@ public class DoorLock : UdonSharpBehaviour
             _doorAnimator = _door.GetComponent<Animator>();
         }
 
-        // if (gameObject.GetComponent<EventReceiver>() != null)
-        // {
-        //     _eventReceiver = gameObject.GetComponent<EventReceiver>();
-        // }
-        
         if (Networking.LocalPlayer.IsOwner(gameObject))
         {
             IsLocked = true;
@@ -81,7 +80,7 @@ public class DoorLock : UdonSharpBehaviour
             Networking.SetOwner(Networking.LocalPlayer,gameObject);
         }
 
-        if (Store.DoesPlayerOwnProduct(Networking.LocalPlayer, _product))
+        if ((Store.DoesPlayerOwnProduct(Networking.LocalPlayer, _product)) || (_overrideLock))
         {
             Debug.Log("PLAYER CAN ENTER HERE");
             IsLocked = false;
@@ -103,11 +102,11 @@ public class DoorLock : UdonSharpBehaviour
             _isOpen = false;
         }
     }
-
-    public void OnPurchaseUse(IProduct product)
-    {
-        //
-    }
+    
+    // public void OnPurchaseUse(IProduct product)
+    // {
+    //     //
+    // }
     
     public void OnListAvailableProducts(IProduct[] products)
     {

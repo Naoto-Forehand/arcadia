@@ -9,16 +9,14 @@ using VRC.Udon.Common.Interfaces;
 public class PickupPurchase : UdonSharpBehaviour
 {
     private IProduct _product;
-    private SimpleProduct _simpleProduct;
+    private UdonProduct _simpleProduct;
     private string _groupID;
     
-    public void Init(IProduct product, SimpleProduct simpleProduct, string groupID)
+    public void Init(IProduct product, UdonProduct simpleProduct, string groupID)
     {
         _product = product;
         _simpleProduct = simpleProduct;
         _groupID = groupID;
-        // Debug.Log($"MY PRODUCT {_product.ID}");
-        // RequestSerialization();
         var eventReceiver = (IUdonEventReceiver)this;
         Store.UsePurchase(eventReceiver,_product);
     }
@@ -44,9 +42,10 @@ public class PickupPurchase : UdonSharpBehaviour
         var id = (_product != null) ? _product.ID : "";
         Debug.Log($" UseDown {id}");
     }
-
-    public void OnPurchaseUse(IProduct product)
-    {
-        Debug.Log($"{product.Buyer.playerId} {product.ID}");
-    }
+    
+    
+    // public void OnPurchaseUse(IProduct product)
+    // {
+    //     Debug.Log($"{product.Buyer.playerId} {product.ID}");
+    // }
 }

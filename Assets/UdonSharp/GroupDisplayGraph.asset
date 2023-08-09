@@ -24,7 +24,7 @@ MonoBehaviour:
     \"VRCUdonCommonInterfacesIUdonEventReceiver.__set_InteractionText__SystemString__SystemVoid\"\r\n       
     JUMP, 0xFFFFFFFC\r\n    \r\n    .export _interact\r\n    \r\n    _interact:\r\n   
     \r\n        PUSH, GroupID\r\n        PUSH, __shortcode_0\r\n        COPY\r\n       
-    PUSH, __shortcode_0\r\n        EXTERN, \"VRCEconomyStore.__OpenGroupPage__SystemString__SystemVoid\"\r\n       
+    PUSH, __shortcode_0\r\n        EXTERN, \"VRCEconomyStore.__OpenGroupStorePage__SystemString__SystemVoid\"\r\n       
     JUMP, 0xFFFFFFFC\r\n    \r\n\r\n.code_end\r\n"
   assemblyError: 
   graphData:
@@ -112,17 +112,8 @@ MonoBehaviour:
       position: {x: 802.3225, y: -30}
       nodeUIDs: []
       flowUIDs:
-      - 6d37cdd2-d892-481f-b464-580110317b02
+      - 714747f7-0072-48a3-ac29-015e33a049d2
       nodeValues: []
-    - fullName: VRCEconomyStore.__OpenGroupPage__SystemString__SystemVoid
-      uid: 6d37cdd2-d892-481f-b464-580110317b02
-      position: {x: 980.3225, y: -32}
-      nodeUIDs:
-      - 70aa2b93-1cbd-4a17-89a4-89d0daaf51b9|0
-      flowUIDs: []
-      nodeValues:
-      - unityObjectValue: {fileID: 0}
-        stringValue: 
     - fullName: Get_Variable
       uid: 70aa2b93-1cbd-4a17-89a4-89d0daaf51b9
       position: {x: 785.3225, y: 57}
@@ -134,6 +125,15 @@ MonoBehaviour:
         stringValue: System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|ebd6669d-306c-4893-93df-f592e4e74042
       - unityObjectValue: {fileID: 0}
         stringValue: 
+    - fullName: VRCEconomyStore.__OpenGroupStorePage__SystemString__SystemVoid
+      uid: 714747f7-0072-48a3-ac29-015e33a049d2
+      position: {x: 953.99994, y: -24.250496}
+      nodeUIDs:
+      - 70aa2b93-1cbd-4a17-89a4-89d0daaf51b9|0
+      flowUIDs: []
+      nodeValues:
+      - unityObjectValue: {fileID: 0}
+        stringValue: 
     updateOrder: 0
   graphElementData:
   - type: 2
@@ -141,6 +141,6 @@ MonoBehaviour:
     jsonData: '{"uid":"864bd79b-b799-4737-8465-6d619faeeed3","layout":{"serializedVersion":"2","x":284.0,"y":-95.0,"width":480.0,"height":251.0},"containedElements":["7941329f-92f5-4d3f-b956-2118e8cf63d0","dbced190-3b86-46c2-92bc-fdacaedd8d33","67026bee-167a-4d0e-aa4c-8ce088ca0044"],"title":"OnStart","layer":-1,"elementTypeColor":{"r":0.0,"g":0.0,"b":0.0,"a":1.0}}'
   - type: 2
     uid: f4333c65-f827-4b28-ad02-6eabffcbe482
-    jsonData: '{"uid":"f4333c65-f827-4b28-ad02-6eabffcbe482","layout":{"serializedVersion":"2","x":760.0,"y":-90.00000762939453,"width":419.0,"height":255.0},"containedElements":["bb064938-ed31-4580-9172-bbb4719a737d","6d37cdd2-d892-481f-b464-580110317b02","70aa2b93-1cbd-4a17-89a4-89d0daaf51b9"],"title":"OnInteract","layer":-1,"elementTypeColor":{"r":0.0,"g":0.0,"b":0.0,"a":1.0}}'
+    jsonData: '{"uid":"f4333c65-f827-4b28-ad02-6eabffcbe482","layout":{"serializedVersion":"2","x":760.0,"y":-88.0,"width":434.0,"height":253.0},"containedElements":["bb064938-ed31-4580-9172-bbb4719a737d","70aa2b93-1cbd-4a17-89a4-89d0daaf51b9","714747f7-0072-48a3-ac29-015e33a049d2"],"title":"OnInteract","layer":-1,"elementTypeColor":{"r":0.0,"g":0.0,"b":0.0,"a":1.0}}'
   version: 1.0.0
   showAssembly: 0

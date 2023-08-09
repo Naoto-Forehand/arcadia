@@ -19,7 +19,7 @@ public class ConsolePurchaser : UdonSharpBehaviour
     private string PURCHASE_GROUP_ID;
     
     [SerializeField]
-    private SimpleProduct[] _products;
+    private UdonProduct[] _products;
 
     [SerializeField]
     private GameObject _prefabPurchaser;
@@ -34,8 +34,6 @@ public class ConsolePurchaser : UdonSharpBehaviour
     {
         var pos = transform.position;
         _spawnLocation = new Vector3(pos.x,pos.y + 2,pos.z);
-        // _objectPool = gameObject.GetComponent<ObjectPool<GameObject>>();
-        // ConsoleGraph.publicVariables.TrySetVariableValue<DoorLock>("door", DoorLock);
     }
 
     public override void Interact()
@@ -51,7 +49,7 @@ public class ConsolePurchaser : UdonSharpBehaviour
     {
         Debug.Log($"Found {products.Length} products!");
         IProduct product = null;
-        SimpleProduct simp = null;
+        UdonProduct simp = null;
         for (int productInd = 0; productInd < products.Length; ++productInd)
         {
             if (products[productInd].ID == _products[_indexPurchase].ID)
