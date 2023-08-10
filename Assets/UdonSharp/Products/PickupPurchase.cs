@@ -33,8 +33,6 @@ public class PickupPurchase : UdonSharpBehaviour
         Debug.Log($" UseUp {id}");
         var eventReceiver = (IUdonEventReceiver)this;
         Store.UsePurchase(eventReceiver,_product);
-        
-        Store.OpenGroupPage(_groupID);
     }
 
     public override void OnPickupUseDown()
@@ -42,10 +40,4 @@ public class PickupPurchase : UdonSharpBehaviour
         var id = (_product != null) ? _product.ID : "";
         Debug.Log($" UseDown {id}");
     }
-    
-    
-    // public void OnPurchaseUse(IProduct product)
-    // {
-    //     Debug.Log($"{product.Buyer.playerId} {product.ID}");
-    // }
 }

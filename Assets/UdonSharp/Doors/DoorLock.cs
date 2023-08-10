@@ -20,8 +20,16 @@ public class DoorLock : UdonSharpBehaviour
     
     [SerializeField]
     private UdonProduct _product;
+
+    [SerializeField]
+    private string _productID;
+
+    public string ProductID
+    {
+        get { return _productID; }
+    }
     
-    [UdonSynced, FieldChangeCallback(nameof(IsLocked))]
+    // [UdonSynced, FieldChangeCallback(nameof(IsLocked))]
     private bool _isLocked;
     [UdonSynced, FieldChangeCallback(nameof(IsOpen))]
     private bool _isOpen;
@@ -47,7 +55,7 @@ public class DoorLock : UdonSharpBehaviour
 
     public IProduct Product
     {
-        get { return _product; }
+        get { return _fetchedProduct; }
     }
     
     void Start()
@@ -66,7 +74,8 @@ public class DoorLock : UdonSharpBehaviour
         }
         else
         {
-            Debug.Log($"PLAYER CANNOT UNLOCK THIS UNTIL THEY PURCHASE {_product.Name}");
+            _isLocked = true;
+            _isOpen = false;
         }
         
         var eventReceiver = (IUdonEventReceiver)this;
@@ -80,7 +89,7 @@ public class DoorLock : UdonSharpBehaviour
             Networking.SetOwner(Networking.LocalPlayer,gameObject);
         }
 
-        if ((Store.DoesPlayerOwnProduct(Networking.LocalPlayer, _product)) || (_overrideLock))
+        if ((Store.DoesPlayerOwnProduct(Networking.LocalPlayer, Product)) || (_overrideLock))
         {
             Debug.Log("PLAYER CAN ENTER HERE");
             IsLocked = false;
@@ -92,7 +101,7 @@ public class DoorLock : UdonSharpBehaviour
 
     public override void OnDeserialization()
     {
-        if (Store.DoesPlayerOwnProduct(Networking.LocalPlayer, _product))
+        if (Store.DoesPlayerOwnProduct(Networking.LocalPlayer, Product))
         {
             Debug.Log("CAN UNLOCK THIS DOOR");
         }
@@ -102,21 +111,49 @@ public class DoorLock : UdonSharpBehaviour
             _isOpen = false;
         }
     }
-    
-    // public void OnPurchaseUse(IProduct product)
-    // {
-    //     //
-    // }
-    
-    public void OnListAvailableProducts(IProduct[] products)
+
+    public override void OnListPurchases(IProduct[] products, VRCPlayerApi player)
     {
-        for (int index = 0; index < products.Length; ++index)
+        
+    }
+
+    public override void OnListAvailableProducts(IProduct[] products)
+    {
+        foreach (var product in products)
         {
-            if (products[index] == Product)
+            if (product.ID.Equals(ProductID, StringComparison.InvariantCultureIgnoreCase))
             {
-                Debug.Log($"STORE HAS {products[index]}");
-                _fetchedProduct = products[index];
+                _fetchedProduct = product;
             }
         }
+
+        if (Product != null)
+        {
+            Store.UsePurchase((IUdonEventReceiver)this,Product);
+        }
+    }
+
+    public override void OnPurchaseUse(IProduct product, VRCPlayerApi player)
+    {
+        
+    }
+
+    public override void OnPurchaseConfirmed(IProduct product, VRCPlayerApi player)
+    {
+        
+    }
+
+    public override void OnPurchaseExpired(IProduct product, VRCPlayerApi player)
+    {
+        if ((IsOpen || _isOpen) && (player == Networking.LocalPlayer))
+        {
+            IsOpen = false;
+            IsLocked = true;
+        }
+    }
+
+    public override void OnPurchasesLoaded(IProduct[] products, VRCPlayerApi player)
+    {
+        
     }
 }

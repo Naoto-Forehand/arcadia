@@ -72,17 +72,7 @@ public class Joystick : UdonSharpBehaviour
             default:
                 break;
         }
-        // switch (pickupHand)
-        // {
-        //     VRC_Pickup.PickupHand.Right:
-        //         return Networking.LocalPlayer.GetBonePosition(HumanBodyBones.RightHand);
-        //     VRC_Pickup.PickupHand.Left:
-        //         return Networking.LocalPlayer.GetBonePosition(HumanBodyBones.LeftHand);
-        //     VRC_Pickup.PickupHand.None:
-        //     default:
-        //         return Vector3.zero;
-        // }
-        
+
         return handPosition;
     }
     

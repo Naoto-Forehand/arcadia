@@ -1,9 +1,6 @@
 ﻿
 using UdonSharp;
-using UnityEngine;
 using VRC.Economy;
-using VRC.SDKBase;
-using VRC.Udon;
 
 // This class copies example described by Momo
 public class GroupDisplay : UdonSharpBehaviour

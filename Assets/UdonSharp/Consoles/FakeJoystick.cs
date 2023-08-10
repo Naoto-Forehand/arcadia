@@ -13,19 +13,41 @@ public class FakeJoystick : UdonSharpBehaviour
     [UdonSynced, FieldChangeCallback(nameof(IsHeld))]
     private bool _isHeld;
 
+    [UdonSynced, FieldChangeCallback(nameof(PickUpHand))]
+    private int _pickUpHand;
+    
     public bool IsHeld
     {
         get { return _isHeld; }
         set { _isHeld = value; }
     }
+
+    public int PickUpHand
+    {
+        get { return _pickUpHand; }
+        set { _pickUpHand = value; }
+    }
+
+    private const int UNASSIGNED = -1;
+    private Vector3 _lastVelocity;
     
     void Start()
     {
         if (Networking.IsOwner(gameObject))
         {
             IsHeld = false;
-            
+            PickUpHand = UNASSIGNED;
             RequestSerialization();
+        }
+        
+        _lastVelocity = Vector3.zero;
+    }
+
+    private void FixedUpdate()
+    {
+        if (IsHeld)
+        {
+            _lastVelocity = Networking.LocalPlayer.GetVelocity();
         }
     }
 
@@ -35,8 +57,9 @@ public class FakeJoystick : UdonSharpBehaviour
         {
             var currentVelocity = Networking.LocalPlayer.GetVelocity();
             var cameraPos = _camera.transform.position;
-            Debug.Log($"{currentVelocity} {cameraPos}");
-            cameraPos += currentVelocity;
+            var updated = currentVelocity - _lastVelocity / Time.deltaTime;
+            Debug.Log($"{currentVelocity} {updated} {cameraPos} {currentVelocity.magnitude} {updated.magnitude}");
+            cameraPos += updated;
             Debug.Log($"{currentVelocity} {cameraPos}");
             _camera.transform.position = cameraPos;
         }
@@ -51,6 +74,18 @@ public class FakeJoystick : UdonSharpBehaviour
 
         if (Networking.IsOwner(gameObject))
         {
+            var leftHandPickup = Networking.LocalPlayer.GetPickupInHand(VRC_Pickup.PickupHand.Left);
+            var rightHandPickup = Networking.LocalPlayer.GetPickupInHand(VRC_Pickup.PickupHand.Right);
+            if (leftHandPickup != null && PickUpHand == UNASSIGNED && leftHandPickup == this)
+            {
+                PickUpHand = (int)VRC_Pickup.PickupHand.Left;
+            }
+
+            if (rightHandPickup != null && PickUpHand == UNASSIGNED && rightHandPickup == this)
+            {
+                PickUpHand = (int)VRC_Pickup.PickupHand.Right;
+            }
+            
             IsHeld = true;
             RequestSerialization();
         }
@@ -61,6 +96,7 @@ public class FakeJoystick : UdonSharpBehaviour
         if (Networking.IsOwner(gameObject))
         {
             IsHeld = false;
+            PickUpHand = UNASSIGNED;
             RequestSerialization();
         }
     }
