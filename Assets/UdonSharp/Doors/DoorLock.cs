@@ -10,16 +10,16 @@ using VRC.Udon.Common.Interfaces;
 
 public class DoorLock : UdonSharpBehaviour
 {
+    [SerializeField]
     private GameObject _door;
     private Animator _doorAnimator;
     private const string DOOR_TRIGGER = "character_nearby";
     private IProduct _fetchedProduct;
+    [SerializeField]
+    private AudioSource _audio;
 
     [SerializeField]
     private bool _overrideLock;
-    
-    [SerializeField]
-    private UdonProduct _product;
 
     [SerializeField]
     private string _productID;
@@ -50,6 +50,22 @@ public class DoorLock : UdonSharpBehaviour
         {
             _isOpen = IsLocked ? false : value;
             _doorAnimator.SetBool(DOOR_TRIGGER, _isOpen);
+            if (_isOpen)
+            {
+                if (_audio != null)
+                {
+                    _audio.pitch = 1;
+                    _audio.PlayOneShot(_audio.clip);
+                }
+            }
+            else
+            {
+                if (_audio != null)
+                {
+                    _audio.pitch = -1;
+                    _audio.PlayOneShot(_audio.clip);
+                }
+            }
         }
     }
 
@@ -60,11 +76,13 @@ public class DoorLock : UdonSharpBehaviour
     
     void Start()
     {
-        _door = gameObject;
+        _door = (_door == null) ? gameObject : _door;
         if (_door != null)
         {
             _doorAnimator = _door.GetComponent<Animator>();
         }
+
+        _audio = gameObject.GetComponent<AudioSource>();
 
         if (Networking.LocalPlayer.IsOwner(gameObject))
         {
@@ -92,9 +110,11 @@ public class DoorLock : UdonSharpBehaviour
         if ((Store.DoesPlayerOwnProduct(Networking.LocalPlayer, Product)) || (_overrideLock))
         {
             Debug.Log("PLAYER CAN ENTER HERE");
-            IsLocked = false;
-            IsOpen = true;
-            
+            if (IsLocked)
+            {
+                ToggleLock();
+            }
+            ToggleDoor();
             RequestSerialization();
         }
     }
@@ -104,6 +124,7 @@ public class DoorLock : UdonSharpBehaviour
         if (Store.DoesPlayerOwnProduct(Networking.LocalPlayer, Product))
         {
             Debug.Log("CAN UNLOCK THIS DOOR");
+            _isLocked = false;
         }
         else
         {
@@ -155,5 +176,15 @@ public class DoorLock : UdonSharpBehaviour
     public override void OnPurchasesLoaded(IProduct[] products, VRCPlayerApi player)
     {
         
+    }
+
+    private void ToggleLock()
+    {
+        IsLocked = !IsLocked;
+    }
+    
+    private void ToggleDoor()
+    {
+        IsOpen = !IsOpen;
     }
 }

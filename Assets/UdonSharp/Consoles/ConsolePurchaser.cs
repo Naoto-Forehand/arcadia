@@ -5,8 +5,12 @@ using VRC.SDKBase;
 using VRC.Udon.Common.Interfaces;
 using Object = UnityEngine.Object;
 
+// TODO: Update name to TokenDispenser
 public class ConsolePurchaser : UdonSharpBehaviour
 {
+    [SerializeField]
+    private AudioSource _sfx;
+    
     [SerializeField]
     private string PURCHASE_GROUP_ID;
     
@@ -17,10 +21,26 @@ public class ConsolePurchaser : UdonSharpBehaviour
     private GameObject _prefabPurchaser;
 
     [SerializeField]
-    private int _indexPurchase;
+    private int _tokenMax;
 
     private IProduct[] _availableProducts;
     private Vector3 _spawnLocation;
+    
+    [UdonSynced, FieldChangeCallback(nameof(TokensGenerated))]
+    private int _tokensGenerated;
+
+    public int TokensGenerated
+    {
+        get { return _tokensGenerated; }
+        set
+        {
+            _tokensGenerated = value;
+            if (Networking.IsOwner(gameObject))
+            {
+                RequestSerialization();
+            }
+        }
+    }
     
     private void Start()
     {
@@ -29,21 +49,30 @@ public class ConsolePurchaser : UdonSharpBehaviour
         
         var ub = (IUdonEventReceiver)this;
         Store.ListAvailableProducts(ub);
+
+        if (Networking.IsOwner(gameObject))
+        {
+            TokensGenerated = 0;
+        }
     }
 
     public override void Interact()
     {
-        Debug.Log("CONSOLE PRESSED");
+        Debug.Log($"CONSOLE PRESSED {TokensGenerated} {_tokenMax}");
         if (!Networking.LocalPlayer.IsOwner(gameObject))
         {
             Networking.SetOwner(Networking.LocalPlayer, gameObject);
         }
 
-        foreach (var product in _availableProducts)
+        if (TokensGenerated < _tokenMax)
         {
-            if (Store.DoesPlayerOwnProduct(Networking.LocalPlayer, product))
+            foreach (var product in _availableProducts)
             {
-                CreateToken();
+                if (Store.DoesPlayerOwnProduct(Networking.LocalPlayer, product))
+                {
+                    CreateToken();
+                    break;
+                }
             }
         }
     }
@@ -52,25 +81,13 @@ public class ConsolePurchaser : UdonSharpBehaviour
     {
         Debug.Log($"Found {products.Length} products!");
         _availableProducts = products;
-        // IProduct product = null;
-        // UdonProduct simp = null;
-        // for (int productInd = 0; productInd < products.Length; ++productInd)
-        // {
-        //     if (products[productInd].ID == _products[_indexPurchase].ID)
-        //     {
-        //         product = products[productInd];
-        //         simp = _products[_indexPurchase];
-        //     }
-        // }
-        //
-        // Debug.Log($"{(product != null)} being attached to object");
-        // var purchaser = Object.Instantiate(_prefabPurchaser, _spawnLocation, Quaternion.identity);
-        // purchaser.GetComponent<PickupPurchase>().Init(product,simp,PURCHASE_GROUP_ID);
     }
 
     private void CreateToken()
     {
+        _sfx.PlayOneShot(_sfx.clip);
         var purchaser = Object.Instantiate(_prefabPurchaser, _spawnLocation, Quaternion.identity);
+        purchaser.GetComponent<Token>().Init(this);
         purchaser.GetComponent<Rigidbody>().AddForce(Vector3.up);
     }
 }

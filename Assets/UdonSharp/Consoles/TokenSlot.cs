@@ -1,5 +1,4 @@
 ﻿
-using System;
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
@@ -10,10 +9,15 @@ public class TokenSlot : UdonSharpBehaviour
     [SerializeField]
     private GameObject[] _triggerObjects;
 
+    [SerializeField]
+    private Camera _target;
+    
     [UdonSynced, FieldChangeCallback(nameof(IsOccupied))]
     private bool _isOccupied;
 
     private bool _objectsEnabled;
+    private Vector3 _defaultPosition;
+    private Quaternion _defaultRotation;
     
     public bool IsOccupied
     {
@@ -39,6 +43,9 @@ public class TokenSlot : UdonSharpBehaviour
     
     void Start()
     {
+        _defaultPosition = _target.transform.position;
+        _defaultRotation = _target.transform.rotation;
+        
         if (Networking.LocalPlayer.IsOwner(gameObject))
         {
             IsOccupied = false;
@@ -48,10 +55,23 @@ public class TokenSlot : UdonSharpBehaviour
 
     public override void OnPlayerTriggerEnter(VRCPlayerApi player)
     {
+        Debug.Log($"{player.playerId} entered");
         if (Networking.LocalPlayer == player && !Networking.LocalPlayer.IsOwner(gameObject))
+        {
+            Debug.Log("SETTING OWNER");
+        }
+
+        if (Networking.IsOwner(player, gameObject))
         {
             Networking.SetOwner(player,gameObject);
             IsOccupied = true;
+            var possibleToken = GetToken(player);
+            if (possibleToken != null && !possibleToken.IsEnabled)
+            {
+                Debug.Log("ENABLING TOKEN");
+                possibleToken.IsEnabled = true;
+                possibleToken.SetTokenSlot(this);
+            }
             RequestSerialization();
         }
     }
@@ -60,12 +80,7 @@ public class TokenSlot : UdonSharpBehaviour
     {
         if (IsOccupied && Networking.IsOwner(player, gameObject))
         {
-            var possibleToken = GetToken(player);
-            if (possibleToken != null && !possibleToken.IsEnabled)
-            {
-                possibleToken.IsEnabled = true;
-                possibleToken.SetTokenSlot(this);
-            }
+            //
         }
     }
 
@@ -87,6 +102,7 @@ public class TokenSlot : UdonSharpBehaviour
 
     public void TriggerScreen()
     {
+        Debug.Log("TURN THINGS ON NOW PLEASE");
         if (Networking.LocalPlayer.IsOwner(gameObject))
         {
             if (!ObjectsEnabled)
@@ -111,5 +127,11 @@ public class TokenSlot : UdonSharpBehaviour
         {
             return null;
         }
+    }
+
+    public void TriggerReset()
+    {
+        Debug.Log($"SHOULD RESET CAM POSITION AND ROTATION TO {_defaultPosition} {_defaultRotation}");
+        _target.transform.SetPositionAndRotation(_defaultPosition,_defaultRotation);
     }
 }
